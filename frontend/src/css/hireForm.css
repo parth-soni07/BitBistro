@@ -1,0 +1,67 @@
+.project-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    perspective: 1000px;
+}
+
+.project-card {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    backface-visibility: hidden;
+}
+
+.project-front {
+    z-index: 2;
+}
+
+.project-back {
+    transform: rotateY(180deg);
+}
+
+.project-container.flipped .project-front {
+    transform: rotateY(180deg);
+}
+
+.project-container.flipped .project-back {
+    transform: rotateY(0deg);
+}
+.post-project-button {
+    display: block;
+    width: 50%;
+    background-color: #57C675;
+    /* Orange color */
+    color: #fff;
+    border: none;
+    padding: 15px 0;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-left: 20%;
+}
+
+.post-project
+-button:hover {
+    transform: scale(1.3);
+    /* Dynamically change size */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+}
+.project-form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.project-form input,
+.project-form textarea {
+    width: 80%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
