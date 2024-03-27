@@ -81,11 +81,15 @@ const RecentlyPosted = () => {
               <p className="card-timeleft">{project.timeLeft}</p>
               <p className="card-description">{project.description}</p>
               <p className="card-min-bid">Minimum Bid: {project.minBid}</p>
-              <div className="apply-now-link">
+              <form className="recent-card-form">
+                <input type="number" placeholder="Bid Amount" />
+                <button className="recent-post-button">Post Bid</button>
+              </form>
+              {/* <div className="apply-now-link">
                 <a href="#" className="apply-now-link">
                   Apply Now
                 </a>
-              </div>
+              </div>*/}
             </div>
           </div>
         ))}

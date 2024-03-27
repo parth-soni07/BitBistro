@@ -58,7 +58,7 @@ const ProjectForm = () => {
   return (
     <div className={`project-container ${isFlipped ? "flipped" : ""}`}>
       <div className="project-card project-front">
-        <img src={Owner} alt="Right Image" className="section-image" />
+        <img src={Owner} alt="Right Image" className="right-section-image" />
         <button className="post-project-button" onClick={handleButtonClick}>
           Post Project
         </button>
@@ -81,7 +81,9 @@ const ProjectForm = () => {
             value={projectMetrics}
             onChange={(e) => setProjectMetrics(e.target.value)}
           />
-          <button className="post-button" type="submit">Post</button>
+          <button className="post-button" type="submit">
+            Post
+          </button>
         </form>
       </div>
     </div>
