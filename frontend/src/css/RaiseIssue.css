@@ -1,0 +1,69 @@
+/* raiseIssueStyles.css */
+
+.raise-issue-container {
+    margin-top: 50px;
+}
+
+span{
+    color: #ff6b6b;
+}
+.raise-issue-heading {
+     
+    font-weight: bolder;   /* Red color */
+    font-size: 40px;
+}
+
+.raise-issue-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.raise-issue-left {
+    width: 40%;
+}
+
+.raise-issue-left img {
+    width: 100%;
+}
+
+.raise-issue-right {
+    width: 50%;
+}
+
+.raise-issue-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.raise-issue-form label {
+    margin-bottom: 10px;
+}
+
+.raise-issue-form input,
+.raise-issue-form textarea {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.raise-issue-button {
+    margin: 1rem 0;
+        background-color: #ff6b6b;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-left: 10px;
+        text-decoration: none;
+}
+
+.raise-issue-button:hover {
+    background-color: #FFC727;
+        transform: scale(1.1);
+}
