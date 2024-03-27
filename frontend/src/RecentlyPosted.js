@@ -81,7 +81,7 @@ const RecentlyPosted = () => {
   };
 
   return (
-    <div className="recently-posted-container">
+    <div id="recently-posted" className="recently-posted-container">
       <div className="recently-posted-header">
         <div className="heading-text">
           <h1>
