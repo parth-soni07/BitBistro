@@ -23,9 +23,9 @@ contract Bidding {
     // Contract state
     address owner;
     BiddingResult result;
-    string projectName;
-    string projectDescription;
-    string projectMetrics;
+    string public projectName;
+    string public projectDescription;
+    string public projectMetrics;
     mapping(address => bytes) public encryptedBids;
     mapping(address => int) public bids;
     address[] bidders;
