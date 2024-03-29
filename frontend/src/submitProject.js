@@ -21,10 +21,12 @@ const PostProject = () => {
         </h1>{" "}
         <h2>
           {" "}
-          Submit <span> IT </span>here
+          Submit <span className="span-h2"> IT </span>here
         </h2>
         <form className="project-form" onSubmit={handleSubmit}>
-          <label htmlFor="deadline" className="altert-time">Days Left for Deadline: 4</label>
+          <label htmlFor="deadline" className="altert-time">
+            Days Left for Deadline: 4
+          </label>
           <label htmlFor="jobId">Job ID:</label>
           <input
             type="text"

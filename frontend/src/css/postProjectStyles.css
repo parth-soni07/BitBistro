@@ -59,6 +59,11 @@ button[type="submit"]:hover {
 
 .submit-project-left {
     width: 50%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.submit-project-left:hover {
+    width: 50%;
+    transform: scale(1.1);
 }
 .submit-project-right {
     width: 50%;
@@ -88,7 +93,10 @@ button[type="submit"]:hover {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-span{
+.span-h1{
+    color: #407BFF;
+}
+.span-h2 {
     color: #407BFF;
 }
 .altert-time{

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import "./css/App.css"; // Import CSS file for styling
 import SubmitWorks from "./submitProject";
+import Issues from "./RaiseIssue";
 import "@rainbow-me/rainbowkit/styles.css";
 import {
   RainbowKitProvider,
@@ -47,41 +48,47 @@ const HomePage = () => {
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider>
             <Routes>
-              <Route exact path="/" element={<div className="container">
-                <nav className="navbar">
-                  <div className="navbar-left">
-                    <h1 className="logo">FreLanCircle</h1>
-                    <ul className="nav-links">
-                      <li>
-                        <Link to="/">Home</Link> {/* Path for Home page */}
-                      </li>
-                      <li>
-                        <Link to="/issues">Issues</Link>{" "}
-                        {/* Path for Issues page */}
-                      </li>
-                      <li>
-                        <Link to="/submit-work">Submit Work</Link>{" "}
-                        {/* Path for Submit Work page */}
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="navbar-right">
-                    <ConnectButton />
-                  </div>
-                </nav>
+              <Route
+                exact
+                path="/"
+                element={
+                  <div className="container">
+                    <nav className="navbar">
+                      <div className="navbar-left">
+                        <h1 className="logo">FreLanCircle</h1>
+                        <ul className="nav-links">
+                          <li>
+                            <Link to="/">Home</Link> {/* Path for Home page */}
+                          </li>
+                          <li>
+                            <Link to="/issues">Issues</Link>{" "}
+                            {/* Path for Issues page */}
+                          </li>
+                          <li>
+                            <Link to="/submit-work">Submit Work</Link>{" "}
+                            {/* Path for Submit Work page */}
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="navbar-right">
+                        <ConnectButton />
+                      </div>
+                    </nav>
 
-                <div className="main-content">
-                  <div className="left-section">
-                    <HireForm />
+                    <div className="main-content">
+                      <div className="left-section">
+                        <HireForm />
+                      </div>
+                      <div className="right-section">
+                        <ProjectForm />
+                      </div>
+                    </div>
+                    <RecentlyPosted />
                   </div>
-                  <div className="right-section">
-                    <ProjectForm />
-                  </div>
-                </div>
-                <RecentlyPosted />
-                <RaiseIssue />
-              </div>} />
+                }
+              />
               <Route exact path="/submit-work" element={<SubmitWorks />} />
+              <Route exact path="/issues" element={<Issues />} />
             </Routes>
           </RainbowKitProvider>
         </QueryClientProvider>

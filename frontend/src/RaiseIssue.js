@@ -14,6 +14,10 @@ const RaiseIssue = () => {
           <img src={Annoyed} alt="Issue Illustration" />
         </div>
         <div className="raise-issue-right">
+          <h2>
+            Tell <span>US</span> about it & <span> OUR</span> team will look
+            <span> UPON </span> it for you
+          </h2>
           <form className="raise-issue-form">
             <label htmlFor="projectName">Project Name:</label>
             <input type="text" id="projectName" name="projectName" />
