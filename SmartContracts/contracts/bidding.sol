@@ -68,7 +68,6 @@ contract Bidding {
 
     // Function to place bid
     function placeBid(bytes memory encryptedBid) public payable biddingActive {
-        require(msg.value == 2 ether, "Stake amount must be exactly 2 ether");
 
         encryptedBids[msg.sender] = encryptedBid;
 
@@ -77,14 +76,29 @@ contract Bidding {
 
     // Function to compute winner
     function computeWinner() public onlyOwner {
-        require(
-            bidders.length >= MIN_NUM_BIDDERS,
-            "At least 3 bidders required"
-        );
+        require(bidders.length >= MIN_NUM_BIDDERS, "At least 3 bidders required");
 
-        
-        emit WinnerComputed(result.winner, result.winningBid);
-    }
+        // Initialize minimum bid to the maximum possible value
+        int minimumBid = type(int).max;
+        address minimumBidder;
+
+        // Iterate through bidders to find the minimum bid and bidder
+        for (uint i = 0; i < bidders.length; i++) {
+            address bidder = bidders[i];
+            int bidAmount = bids[bidder];
+            if (bidAmount < minimumBid) {
+                minimumBid = bidAmount;
+                minimumBidder = bidder;
+            }
+        }
+
+        // Update the result
+        result.winner = minimumBidder;
+        result.winningBid = minimumBid;
+
+        emit WinnerComputed(minimumBidder, minimumBid);
+}
+
 
     // Function to reveal bid
     function revealBid(int bidAmount, bytes32 salt) public biddingActive {
