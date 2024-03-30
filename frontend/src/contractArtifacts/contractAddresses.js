@@ -1,1 +1,1 @@
-export const masterAddress = "0xBB162fB666211CD86dB1be55Ad1b9cf40bffC34F";
+export const masterAddress = "0x3D6e741C2f2dABCE076b0Da80d97Cbe8e6d5Da4d";

@@ -3,6 +3,7 @@ import "./css/recentlyPostedStyles.css";
 import masterData from "../src/contractArtifacts/Master.json";
 import biddingData from "../src/contractArtifacts/Bidding.json";
 import { masterAddress } from "../src/contractArtifacts/contractAddresses.js";
+import { encrypt, decrypt } from "./scripts/encrypt.js";
 const ethers = require("ethers");
 
 const RecentlyPosted = () => {
@@ -15,7 +16,10 @@ const RecentlyPosted = () => {
 
   useEffect(() => {
     getProjects();
-  }, []); // Empty dependency array means this effect will run only once when the component mounts
+  }, []);
+
+
+
 
   async function getProjects() {
     const masterAbi = masterData.abi;
@@ -43,12 +47,14 @@ const RecentlyPosted = () => {
         const projectName = await biddingContract.projectName();
         const projectDescription = await biddingContract.projectDescription();
         const projectMetrics = await biddingContract.projectMetrics();
+        const isBidPlaced = await biddingContract.hasPlacedBid(signer.getAddress());
 
         const projectData = {
           id: projectId,
           name: projectName,
           description: projectDescription,
-          metrics: projectMetrics
+          metrics: projectMetrics,
+          isBidPlaced: isBidPlaced
         };
 
         projectDataArray.push(projectData);
@@ -73,11 +79,59 @@ const RecentlyPosted = () => {
     }
   };
 
-  const handlePostBid = (event) => {
+  const handlePostBid = async (event, projectID) => {
     // Prevent default form submission behavior
     event.preventDefault();
-    // Call the getProjects function or any other action you want here
-    getProjects();
+
+    // Retrieve bid amount and secret key from form inputs
+    const form = event.currentTarget.closest('form');
+    const bidAmount = parseFloat(form.querySelector("#bidAmountInput").value);
+    const secretKey = form.querySelector("#secretKeyInput").value;
+    const toBidContract = new ethers.Contract(projectID, biddingData.abi, signer);
+    const encryptedBidAmount = encrypt(bidAmount, secretKey);
+    console.log("Encrypted Bid:", encryptedBidAmount);
+    try {
+      const bid = await toBidContract.placeBid(encryptedBidAmount);
+      console.log("Bid placed successfully");
+    } catch (error) {
+      console.log("Error placing bid:", error);
+    }
+  };
+
+  const handleRevealBid = async (event, projectID) => {
+    // Prevent default form submission behavior
+    event.preventDefault();
+
+    // Retrieve bid amount and secret key from form inputs
+    const form = event.currentTarget.closest('form');
+    const bidAmount = parseFloat(form.querySelector("#bidAmountInput").value);
+    const secretKey = form.querySelector("#secretKeyInput").value;
+
+    const toBidContract = new ethers.Contract(projectID, biddingData.abi, signer);
+
+    try {
+      // Retrieve the stored encrypted bid from the blockchain
+      const storedEncryptedBid = await toBidContract.encryptedBids(signer.getAddress());
+
+      // Encrypt the bid amount with the provided secret key
+      const encryptedBidAmount = encrypt(bidAmount, secretKey);
+
+      // Decrypt both the stored encrypted bid and the new encrypted bid
+      const storedDecryptedBid = decrypt(storedEncryptedBid, secretKey).toString();
+      const newDecryptedBid = decrypt(encryptedBidAmount, secretKey).toString();
+
+      // Check if both decrypted bids match
+      if (storedDecryptedBid === newDecryptedBid) {
+        // If they match, reveal the bid
+        const bid = await toBidContract.revealBid(bidAmount);
+        console.log("Bid Revealed successfully");
+      } else {
+        // If they don't match, log an error
+        console.log("Error: Encrypted Bid does not match the stored Encrypted Bid");
+      }
+    } catch (error) {
+      console.log("Error revealing bid:", error);
+    }
   };
 
   return (
@@ -102,10 +156,17 @@ const RecentlyPosted = () => {
               <p className="card-description">{project.description}</p>
               <p className="card-metrics">{project.metrics}</p>
               <form className="recent-card-form">
-                <input type="number" placeholder="Bid Amount" />
-                <button className="recent-post-button" onClick={handlePostBid}>
-                  Post Bid
-                </button>
+                <input type="number" placeholder="Bid Amount" id="bidAmountInput" />
+                <input type="text" placeholder="Secret Key" id="secretKeyInput" />
+                {project.isBidPlaced ? (
+                  <button className="recent-post-button" onClick={(event) => handleRevealBid(event, project.id)}>
+                    Reveal Bid
+                  </button>
+                ) : (
+                  <button className="recent-post-button" onClick={(event) => handlePostBid(event, project.id)}>
+                    Post Bid
+                  </button>
+                )}
               </form>
             </div>
           </div>
