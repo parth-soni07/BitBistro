@@ -80,10 +80,10 @@ contract Bidding {
 
     // Function to compute winner
     function computeWinner() public onlyOwner {
-        require(
-            bidders.length >= MIN_NUM_BIDDERS,
-            "At least 3 bidders required"
-        );
+        // require(
+        //     bidders.length >= MIN_NUM_BIDDERS,
+        //     "At least 3 bidders required"
+        // );
 
         // Initialize minimum bid to the maximum possible value
         int minimumBid = type(int).max;

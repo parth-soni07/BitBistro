@@ -107,7 +107,7 @@ const PreviouslyPosted = () => {
         console.log("Winner of the project:", winner);
         const winningBid = await biddingContract.winningBid();
         console.log("Winning bid amount:", winningBid.toString());
-      }, 3000); // 1000 milliseconds = 1 second
+      }, 5000); // 1000 milliseconds = 1 second
     } catch (error) {
       console.error("Error computing winning bid:", error);
     }

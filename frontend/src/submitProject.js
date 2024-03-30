@@ -30,8 +30,8 @@ const PostProject = () => {
     const escrowAbi = escrowData.abi;
     const biddingContract = new ethers.Contract(event.target.jobId.value , biddingData.abi, signer);
     console.log("Bidding Contract Created");
-    const escrowAddress = await biddingContract.escrowAddress;
-    console.log("Escrow Address:", escrowAddress);
+    const escrowAddress = await biddingContract.escrowAddress();
+    console.log("Escrow Address:", escrowAddress.toString());
     const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, signer);
     console.log("Escrow Contract Created");
     try {

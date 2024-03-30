@@ -90,23 +90,34 @@ const SignBid = () => {
     return projectDataArray;
   }
 
-  const handleSign = async (event, winningBid, winner, projectId, role) => {
+  const handleSign = async (event, projectId, role) => {
     event.preventDefault();
     if (role === 'Owner') {
       const escrowAbi = escrowData.abi;
       const escrowByteCode = escrowData.bytecode;
 
-      const escrowFactory = new ethers.ContractFactory(escrowAbi, escrowByteCode, signer);
-      const escrowContract = await escrowFactory.deploy(winner, winningBid, projectId);
-      console.log("Escrow Contract deployed");
-      const escrowAddress = await escrowContract.address;
-
       const biddingContract = new ethers.Contract(projectId, biddingData.abi, signer);
-      await biddingContract.setEscrowAddress(escrowAddress);
-      console.log("Escrow Address set in Bidding Contract");
+      const winner = await biddingContract.winner();
+      const winningBid = await biddingContract.winningBid();
+
+      // Check if winningBid and winner are defined before deploying escrowContract
+      if (winningBid && winner) {
+        const escrowFactory = new ethers.ContractFactory(escrowAbi, escrowByteCode, signer);
+        const escrowContract = await escrowFactory.deploy(winner, winningBid, projectId);
+        console.log("Escrow Contract deployed");
+        const escrowAddress = await escrowContract.address;
+
+        const biddingContract = new ethers.Contract(projectId, biddingData.abi, signer);
+        await biddingContract.setEscrowAddress(escrowAddress);
+        console.log("Escrow Address set in Bidding Contract");
+      } else {
+        console.error("winningBid or winner is undefined");
+      }
+    } else {
+      console.log("Signed By Freelancer");
     }
-    else console.log("Signed By Freelancer");
   }
+
 
 
   return (
@@ -120,9 +131,13 @@ const SignBid = () => {
             <p className="project-metrics">{project.metrics}</p>
             {/* <p className="current-bid">Current Bid: {project.currentBid}</p> */}
             <p className="owner-stake">
-              Winning Bid : {project.winningBid}
+              Winning Bid : {project.winningBid ? project.winningBid.toString() : 'Loading...'}
             </p>
-            <button className="sign-button" onClick={(event) => handleSign(event, project.winningBid, project.winner, project.id, project.role)}>{project.role === 'Owner' ? 'Sign and Stake as a Owner : ' : 'Sign and Stake as a Freelancer : '} {project.stakeAmount}</button>
+            <button className="sign-button" onClick={(event) => handleSign(event, project.id, project.role)}>
+              {project.role === 'Owner' ? 'Sign and Stake as a Owner : ' : 'Sign and Stake as a Freelancer : '}
+              {project.stakeAmount ? project.stakeAmount.toString() : 'Loading...'}
+            </button>
+
           </div>
         ))}
       </div>
