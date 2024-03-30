@@ -10,13 +10,6 @@
     /* Enlarge the image on hover */
 }
 
-.project-container {
-    padding-top: 20px;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    perspective: 1000px;
-}
 
 .project-card {
     width: 100%;

@@ -3,6 +3,8 @@ import { Route, Routes, Link } from "react-router-dom";
 import "./css/App.css"; // Import CSS file for styling
 import SubmitWorks from "./submitProject";
 import Issues from "./RaiseIssue";
+import Vote from "./Vote";
+import SignBid from "./SignBid";
 import PreviousProjects from "./PreviousProjects";
 import "@rainbow-me/rainbowkit/styles.css";
 import {
@@ -17,7 +19,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import RecentlyPosted from "./RecentlyPosted";
 import ProjectForm from "./projectForm";
 import HireForm from "./hireForm";
-import RaiseIssue from "./RaiseIssue";
+
 
 const Botanix = {
   id: 3636,
@@ -73,6 +75,14 @@ const HomePage = () => {
                             <Link to="/posted-projects">Posted Projects</Link>{" "}
                             {/* Path for Submit Work page */}
                           </li>
+                          <li>
+                            <Link to="/sign-work">Sign Work</Link>{" "}
+                            {/* Path for Submit Work page */}
+                          </li>
+                          <li>
+                            <Link to="/vote">Vote</Link>{" "}
+                            {/* Path for Submit Work page */}
+                          </li>
                         </ul>
                       </div>
                       <div className="navbar-right">
@@ -99,6 +109,8 @@ const HomePage = () => {
                 path="posted-projects"
                 element={<PreviousProjects />}
               />
+              <Route exact path="/vote" element={<Vote />} />
+              <Route exact path="/sign-work" element={<SignBid />} />
             </Routes>
           </RainbowKitProvider>
         </QueryClientProvider>

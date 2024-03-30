@@ -24,7 +24,7 @@
     border-radius: 15px;
     overflow: hidden;
     margin: 20px;
-    padding: 20px;
+    padding: 30px;
     transition: transform 0.3s ease;
 }
 
@@ -36,18 +36,34 @@
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+.project-name:hover {
+    transform: scale(1.2);
 }
 
 .project-description {
-    font-size: 16px;
+    font-size: 20px;
     color: white;
     margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.project-description:hover {
+    transform: scale(1.05);
 }
 
 .project-metrics {
-    font-size: 14px;
+    font-size: 16px;
     color: #fff;
     margin-bottom: 15px;
+
+}
+
+.project-metrics:hover {
+    transform: scale(1.01);
+    transition: transform 0.3s ease;
 }
 
 .button-container {
@@ -60,7 +76,7 @@
     background-color: #ff8c00;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 20px 20px;
     border-radius: 25px;
     cursor: pointer;
     font-size: 16px;
@@ -88,4 +104,46 @@
 
 .span-h1 {
     color: #0C359E;
+}
+
+.negative-button {
+    background-color: #ff1100;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.negative-button:hover {
+    transform: scale(1.1);
+    background-color: #ff8c00;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.positive-button {
+    background-color: #33ff00;
+    color: #fff;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.positive-button:hover {
+    transform: scale(1.1);
+    background-color: #ff8c00;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.project-metrics-div {
+    display: flex;
+    max-width: 80%;
+    justify-content: center;
 }

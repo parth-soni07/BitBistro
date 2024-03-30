@@ -1,0 +1,74 @@
+/* signBidStyles.css */
+.sign-bid-container {
+    margin: 0 auto;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.sign-bid-container h1 {
+    color: #ff6b6b;
+}
+
+.project-cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bid-project-card {
+    width: 80%;
+    background-color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+}
+
+.project-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.project-description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.project-metrics {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 15px;
+}
+
+.current-bid,
+.owner-stake {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.sign-button {
+    background-color: #ff6b6b;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sign-button:hover {
+    transform: scale(1.1);
+    background-color: #ff4757;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+}
