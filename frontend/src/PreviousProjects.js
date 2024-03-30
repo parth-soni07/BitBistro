@@ -91,6 +91,29 @@ const PreviouslyPosted = () => {
     }
   }
 
+  async function computeWinningBid(event, projectId) {
+    event.preventDefault();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const biddingContract = new ethers.Contract(projectId, biddingData.abi, signer);
+
+    try {
+      await biddingContract.computeWinner();
+      console.log("Winner calculated");
+      // Add a delay of 1 second (adjust as needed)
+      setTimeout(async () => {
+        const winner = await biddingContract.winner();
+        console.log("Winner of the project:", winner);
+        const winningBid = await biddingContract.winningBid();
+        console.log("Winning bid amount:", winningBid.toString());
+      }, 3000); // 1000 milliseconds = 1 second
+    } catch (error) {
+      console.error("Error computing winning bid:", error);
+    }
+
+  }
+
   return (
     <div className="previously-posted-container">
       <h1 className="heading">
@@ -109,7 +132,7 @@ const PreviouslyPosted = () => {
               <button className="archive-button" onClick={(event) => toggleBiddingStatus(event, project.id)}>
                 {project.isBiddingPaused ? "Resume" : "Pause"} Bidding
               </button>
-              <button className="compute-bid-button">
+              <button className="compute-bid-button" onClick={(event) => computeWinningBid(event, project.id)}>
                 Compute Winning Bid
               </button>
             </div>

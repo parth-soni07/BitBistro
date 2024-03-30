@@ -14,15 +14,10 @@ contract Bidding {
         _;
     }
 
-    // Struct for storing Bidding result
-    struct BiddingResult {
-        address winner;
-        int winningBid;
-    }
-
     // Contract state
-    address owner;
-    BiddingResult result;
+    address public owner;
+    address public winner;
+    int public winningBid;
     string public projectName;
     string public projectDescription;
     string public projectMetrics;
@@ -30,6 +25,7 @@ contract Bidding {
     mapping(address => int) public bids;
     address[] bidders;
     bool public biddingPaused;
+    bool public winnerCalculated;
 
     // Events
     event BidPlaced(address bidder, uint bidAmount);
@@ -64,6 +60,7 @@ contract Bidding {
         projectDescription = _projectDescription;
         projectMetrics = _projectMetrics;
         biddingPaused = false;
+        winnerCalculated = false;
     }
 
     // Function to place bid
@@ -102,9 +99,9 @@ contract Bidding {
         }
 
         // Update the result
-        result.winner = minimumBidder;
-        result.winningBid = minimumBid;
-
+        winner = minimumBidder;
+        winningBid = minimumBid;
+        winnerCalculated = true;
         emit WinnerComputed(minimumBidder, minimumBid);
     }
 
