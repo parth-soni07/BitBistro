@@ -26,6 +26,7 @@ contract Bidding {
     address[] bidders;
     bool public biddingPaused;
     bool public winnerCalculated;
+    address public escrowAddress;
 
     // Events
     event BidPlaced(address bidder, uint bidAmount);
@@ -125,5 +126,9 @@ contract Bidding {
 
     function hasPlacedBid(address bidder) public view returns (bool) {
         return bytes(encryptedBids[bidder]).length > 0;
+    }
+
+    function setEscrowAddress(address _escrowAddress) public onlyOwner {
+        escrowAddress = _escrowAddress;
     }
 }

@@ -15,14 +15,17 @@ contract Escrow {
     string public codeLink;
     string public assetsLink;
     string public comments;
+    address public projectId;
 
     constructor(
         address _freelancer,
-        uint256 _projectOwnerStake
+        uint256 _projectOwnerStake,
+        address _projectId
     ) {
         projectOwner = msg.sender;
         freelancer = _freelancer;
         projectOwnerStake = _projectOwnerStake;
+        projectId = _projectId;
     }
 
     modifier onlyProjectOwner() {

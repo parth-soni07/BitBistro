@@ -8,6 +8,9 @@ contract disputeHandler {
         bool passed;
     }
 
+    address public projectId;
+    string public problemDescription;
+
     mapping(address => bool) public arbiters;
     mapping(address => bool) public hasVoted;
     mapping(address => bool) public votedFor;
@@ -30,12 +33,10 @@ contract disputeHandler {
         _;
     }
 
-    constructor(address[] memory _arbiters, uint _winningBidAmount) {
+    constructor(address _projectId, string memory _problemDescription) {
         owner = msg.sender;
-        winningBidAmount = _winningBidAmount;
-        for (uint i = 0; i < _arbiters.length; i++) {
-            arbiters[_arbiters[i]] = true;
-        }
+        projectId = _projectId;
+        problemDescription = _problemDescription;
     }
 
     function vote(bool _voteFor) external onlyArbiter {
