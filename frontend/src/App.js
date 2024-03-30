@@ -3,6 +3,7 @@ import { Route, Routes, Link } from "react-router-dom";
 import "./css/App.css"; // Import CSS file for styling
 import SubmitWorks from "./submitProject";
 import Issues from "./RaiseIssue";
+import PreviousProjects from "./PreviousProjects";
 import "@rainbow-me/rainbowkit/styles.css";
 import {
   RainbowKitProvider,
@@ -68,6 +69,10 @@ const HomePage = () => {
                             <Link to="/submit-work">Submit Work</Link>{" "}
                             {/* Path for Submit Work page */}
                           </li>
+                          <li>
+                            <Link to="/posted-projects">Posted Projects</Link>{" "}
+                            {/* Path for Submit Work page */}
+                          </li>
                         </ul>
                       </div>
                       <div className="navbar-right">
@@ -89,6 +94,11 @@ const HomePage = () => {
               />
               <Route exact path="/submit-work" element={<SubmitWorks />} />
               <Route exact path="/issues" element={<Issues />} />
+              <Route
+                exact
+                path="posted-projects"
+                element={<PreviousProjects />}
+              />
             </Routes>
           </RainbowKitProvider>
         </QueryClientProvider>
