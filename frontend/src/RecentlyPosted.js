@@ -89,7 +89,6 @@ const RecentlyPosted = () => {
     const secretKey = form.querySelector("#secretKeyInput").value;
     const toBidContract = new ethers.Contract(projectID, biddingData.abi, signer);
     const encryptedBidAmount = encrypt(bidAmount, secretKey);
-    console.log("Encrypted Bid:", encryptedBidAmount);
     try {
       const bid = await toBidContract.placeBid(encryptedBidAmount);
       console.log("Bid placed successfully");

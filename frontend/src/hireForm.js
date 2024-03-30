@@ -5,7 +5,7 @@ const handleHireFreelancerClick = () => {
   const recentlyPostedSection = document.getElementById("recently-posted");
   if (recentlyPostedSection) {
     recentlyPostedSection.scrollIntoView({ behavior: "smooth" });
-  }
+  } 
 };
 
 const HireForm = () => {
@@ -13,12 +13,15 @@ const HireForm = () => {
     <div className="project-container">
       <div className="project-card project-front">
         <img src={Freelancer} alt="Left Image" className="left-section-image" />
-        <button
-          className="hire-freelancer-button"
-          onClick={handleHireFreelancerClick}
-        >
-          Hire Freelancer
-        </button>
+        <div className="button-div">
+          {" "}
+          <button
+            className="hire-freelancer-button"
+            onClick={handleHireFreelancerClick}
+          >
+            Hire Freelancer
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -76,6 +76,7 @@
 
 .card {
     width: 350px;
+    height: 700px;
     background-color: #fff;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
@@ -95,6 +96,7 @@
 }
 
 .card-title {
+    text-align: center;
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
@@ -104,7 +106,15 @@
     font-size: 16px;
     color: #666;
     margin-bottom: 15px;
+    text-align: center;
 }
+
+.card-metrics{
+    text-align: justify;
+    padding-bottom: 0;
+}
+
+
 
 .card-timeleft {
     font-size: 14px;
