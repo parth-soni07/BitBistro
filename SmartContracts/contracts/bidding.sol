@@ -26,10 +26,10 @@ contract Bidding {
     string public projectName;
     string public projectDescription;
     string public projectMetrics;
-    mapping(address => bytes) public encryptedBids;
+    mapping(address => string) public encryptedBids;
     mapping(address => int) public bids;
     address[] bidders;
-    bool biddingPaused;
+    bool public biddingPaused;
 
     // Events
     event BidPlaced(address bidder, uint bidAmount);
@@ -67,16 +67,25 @@ contract Bidding {
     }
 
     // Function to place bid
-    function placeBid(bytes memory encryptedBid) public payable biddingActive {
-
+    function placeBid(string memory encryptedBid) public payable biddingActive {
         encryptedBids[msg.sender] = encryptedBid;
 
-        emit BidPlaced(msg.sender, msg.value); 
+        emit BidPlaced(msg.sender, msg.value);
+    }
+
+    // Function to reveal bid
+    function revealBid(int bidAmount) public biddingActive {
+        bids[msg.sender] = bidAmount;
+        bidders.push(msg.sender);
+        emit BidRevealed(msg.sender, bidAmount);
     }
 
     // Function to compute winner
     function computeWinner() public onlyOwner {
-        require(bidders.length >= MIN_NUM_BIDDERS, "At least 3 bidders required");
+        require(
+            bidders.length >= MIN_NUM_BIDDERS,
+            "At least 3 bidders required"
+        );
 
         // Initialize minimum bid to the maximum possible value
         int minimumBid = type(int).max;
@@ -97,33 +106,6 @@ contract Bidding {
         result.winningBid = minimumBid;
 
         emit WinnerComputed(minimumBidder, minimumBid);
-}
-
-
-    // Function to reveal bid
-    function revealBid(int bidAmount, bytes32 salt) public biddingActive {
-        require(
-            encryptedBids[msg.sender].length != 0,
-            "You haven't placed a bid"
-        );
-
-        
-        bytes memory encryptedBid = encryptedBids[msg.sender];
-        bytes memory decryptedBid = new bytes(encryptedBid.length);
-        for (uint i = 0; i < encryptedBid.length; i++) {
-            decryptedBid[i] = encryptedBid[i] ^ salt[i];
-        }
-
-        // Convert decrypted bid to integer
-        int decryptedBidAmount = parseInt(toString(decryptedBid));
-
-        // Verify if the decrypted bid matches the provided bid amount
-        require(decryptedBidAmount == bidAmount, "Invalid bid or salt");
-
-        // Update the actual bid amount for the user (previously stored as 0)
-        bids[msg.sender] = bidAmount;
-
-        emit BidRevealed(msg.sender, bidAmount);
     }
 
     // Function to pause bidding
@@ -140,32 +122,11 @@ contract Bidding {
         emit BiddingResumed();
     }
 
-    // Helper function to convert bytes to string
-    function toString(bytes memory data) public pure returns (string memory) {
-        bytes memory bytesString = new bytes(data.length);
-        for (uint i = 0; i < data.length; i++) {
-            bytesString[i] = data[i];
-        }
-        return string(bytesString);
+    function getNumBidsPlaced() public view returns (uint) {
+        return bidders.length;
     }
 
-    // Helper function to convert string to integer
-    function parseInt(string memory _a) internal pure returns (int) {
-        bytes memory bresult = bytes(_a);
-        int mint = 0;
-        bool isneg = false;
-        for (uint i = 0; i < bresult.length; i++) {
-            if ((i == 0) && (bresult[i] == "-")) {
-                isneg = true;
-            }
-            if ((uint8(bresult[i]) >= 48) && (uint8(bresult[i]) <= 57)) {
-                mint *= 10;
-                mint += int8(uint8(bresult[i])) - 48;
-            }
-        }
-        if (isneg) {
-            mint *= -1;
-        }
-        return mint;
+    function hasPlacedBid(address bidder) public view returns (bool) {
+        return bytes(encryptedBids[bidder]).length > 0;
     }
 }
