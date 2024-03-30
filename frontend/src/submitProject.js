@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import "./css/postProjectStyles.css";
 import Done from "./assets/Done-rafiki.png";
+import escrowData from "../src/contractArtifacts/Escrow.json";
+import biddingData from "../src/contractArtifacts/Bidding.json";
+import { masterAddress } from "../src/contractArtifacts/contractAddresses.js";
+const ethers = require("ethers");
+
+
+
+
 const PostProject = () => {
   const [jobId, setJobId] = useState("");
   const [note, setNote] = useState("");
@@ -8,9 +16,30 @@ const PostProject = () => {
   const [videoLink, setVideoLink] = useState("");
   const [deadline, setDeadline] = useState("");
 
-  const handleSubmit = (event) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  async function handleSubmit(event) {
     event.preventDefault();
-    // Add code to handle form submission
+
+    console.log("Job ID:", event.target.jobId.value);
+    console.log("Project Link:", event.target.projectLink.value);
+    console.log("Video Link:", event.target.videoLink.value);
+    console.log("Note:", event.target.note.value);
+
+    const escrowAbi = escrowData.abi;
+    const biddingContract = new ethers.Contract(event.target.jobId.value , biddingData.abi, signer);
+    console.log("Bidding Contract Created");
+    const escrowAddress = await biddingContract.escrowAddress;
+    console.log("Escrow Address:", escrowAddress);
+    const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, signer);
+    console.log("Escrow Contract Created");
+    try {
+      await escrowContract.submitProject(event.target.projectLink.value, event.target.videoLink.value, event.target.note.value);
+      console.log("Project Submitted Successfully");
+    } catch (error) {
+      console.log("Error submitting project:", error);
+    }
   };
 
   return (
@@ -36,14 +65,6 @@ const PostProject = () => {
             onChange={(event) => setJobId(event.target.value)}
             placeholder="Enter Job ID"
           />
-          <label htmlFor="note">Leave a Note:</label>
-          <textarea
-            id="note"
-            name="note"
-            value={note}
-            onChange={(event) => setNote(event.target.value)}
-            placeholder="Write your note here..."
-          />
           <label htmlFor="projectLink">Project Link:</label>
           <input
             type="text"
@@ -61,6 +82,14 @@ const PostProject = () => {
             value={videoLink}
             onChange={(event) => setVideoLink(event.target.value)}
             placeholder="Enter video link"
+          />
+          <label htmlFor="note">Leave a Note:</label>
+          <textarea
+            id="note"
+            name="note"
+            value={note}
+            onChange={(event) => setNote(event.target.value)}
+            placeholder="Write your note here..."
           />
           <button type="submit">Submit</button>
         </form>
