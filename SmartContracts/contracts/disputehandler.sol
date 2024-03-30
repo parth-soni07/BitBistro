@@ -33,10 +33,14 @@ contract disputeHandler {
         _;
     }
 
-    constructor(address _projectId, string memory _problemDescription) {
+    constructor(address _projectId, string memory _problemDescription, address[] memory _arbiterAddresses) {
         owner = msg.sender;
         projectId = _projectId;
         problemDescription = _problemDescription;
+
+        for (uint i = 0; i < _arbiterAddresses.length; i++) {
+            arbiters[_arbiterAddresses[i]] = true;
+        }
     }
 
     function vote(bool _voteFor) external onlyArbiter {

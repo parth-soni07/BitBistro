@@ -6,6 +6,7 @@ contract Master {
     
     address[] public allOwners;
     address[] public allProjects;
+    address[] public disputeHandlers;
 
     function addProject(address _owner, address _project) public {
         ownerToProjects[_owner].push(_project);
@@ -30,5 +31,13 @@ contract Master {
             }
         }
         return false;
+    }
+
+    function addDisputeHandler(address _disputeHandler) public {
+        disputeHandlers.push(_disputeHandler);
+    }
+
+    function getDisputeHandlers() public view returns (address[] memory) {
+        return disputeHandlers;
     }
 }

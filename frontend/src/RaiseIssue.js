@@ -26,10 +26,15 @@ const RaiseIssue = () => {
     const disputeHandlerByteCode = disputeHandlerData.bytecode;
 
     const disputeHandlerFactory = new ethers.ContractFactory(disputeHandlerAbi, disputeHandlerByteCode, signer);
-    const disputeHandlerContract = await disputeHandlerFactory.deploy(projectId, problemDescription);
+    const arbiterAddresses = ["0x18bd2c0c364A6B5142b6Dc2c141bA762949ED960", "0xD3C15aEa275ac6A6f1eD8681Ee002150C9DF810f", "0xF6A48FD0C2D50007B4081F0538778988032f7e28", "0x51ABb7e685A4E3D65fa11fB0BA4b1247a7f48C4E"];
+    const disputeHandlerContract = await disputeHandlerFactory.deploy(projectId, problemDescription, arbiterAddresses);
     console.log("Dispute Handler Contract deployed");
     const disputeHandlerAddress = await disputeHandlerContract.address;
     console.log("Current Deployed Dispute Handler Contract Address : ", disputeHandlerAddress);
+    const masterAbi = masterData.abi;
+    const masterContract = new ethers.Contract(masterAddress, masterAbi, signer);
+    await masterContract.addDisputeHandler(disputeHandlerAddress);
+    console.log("Dispute Handler Contract added to Master Contract");
   }
 
 

@@ -1,38 +1,93 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./css/previouslyPostedStyles.css";
+import disputeData from "../src/contractArtifacts/disputeHandler.json";
+import biddingData from "../src/contractArtifacts/Bidding.json";
+import escrowData from "../src/contractArtifacts/Escrow.json";
+import { encrypt, decrypt } from "./scripts/encrypt.js";
+const ethers = require("ethers");
 
 const Vote = () => {
-  // Sample data for previously posted projects
-  const previouslyPostedProjects = [
-    {
-      id: 1,
-      name: "Project Name 1",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis interdum dictum tortor. Donec vitae massa sit amet magna fermentum congue. Suspendisse tristique risus non elit eleifend egestas.",
-      metrics:
-        "Donec lobortis est at sem interdum, nec congue purus euismod. Aliquam a ex finibus, luctus ligula nec, feugiat erat. Vestibulum quis tempor lectus. Cras ac massa sit amet purus tempus malesuada. Cras iaculis orci vel ligula porttitor tincidunt. Fusce commodo vehicula dolor. Phasellus at est nec ex blandit posuere. Aenean tempor elit sed est interdum, sodales gravida urna consectetur.",
-      link: "abc.com",
-      Descrepency: "Description of what went wrong",
-    },
-    {
-      id: 2,
-      name: "Project Name 2",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis interdum dictum tortor. Donec vitae massa sit amet magna fermentum congue. Suspendisse tristique risus non elit eleifend egestas. Donec lobortis est at sem interdum, ",
-      metrics:
-        "Donec lobortis est at sem interdum, nec congue purus euismod. Aliquam a ex finibus, luctus ligula nec, feugiat erat. Vestibulum quis tempor lectus. Cras ac massa sit amet purus tempus malesuada. Cras iaculis orci vel ligula porttitor tincidunt. Fusce commodo vehicula dolor. Phasellus at est nec ex blandit posuere. Aenean tempor elit sed est interdum, sodales gravida urna consectetur.",
-      link: "abc.com",
-      Descrepency: "Description of what went wrong",
-    },
-  ];
+  const [projectDataArray, setProjectDataArray] = useState([]);
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  useEffect(() => {
+    async function fetchData() {
+
+      const masterAbi = masterData.abi;
+      const masterAddress = masterData.address;
+      const masterContract = new ethers.Contract(masterAddress, masterAbi, signer);
+
+      const contractAddresses = await masterContract.getDisputeHandlers();
+
+
+
+      // Create instances of the contracts using the addresses from the array
+      const projectData = await Promise.all(
+        contractAddresses.map(async (address) => {
+          const disputehandlercontractabi = disputeData.abi;
+          const disputehandlercontract = new ethers.Contract(address, disputehandlercontractabi, signer);
+
+          const projectID = await disputehandlercontract.projectId();
+          const problemDescription = await disputehandlercontract.problemDescription();
+
+          const biddingcontractabi = biddingData.abi;
+          const biddingcontract = new ethers.Contract(projectID, biddingcontractabi, signer);
+
+          const name = await biddingcontract.projectName();
+          const description = await biddingcontract.projectDescription();
+          const metrics = await biddingcontract.projectMetrics();
+          const escrowaddress = await biddingcontract.escrowAddress();
+          const escrowcontractabi = escrowData.abi;
+          const escrowcontract = new ethers.Contract(escrowaddress, escrowcontractabi, signer);
+          const codelink = await escrowcontract.codeLink();
+
+          return {
+            name: name,
+            description: description,
+            metrics: metrics,
+            problemDescription: problemDescription,
+            codeLink: codelink,
+          };
+        })
+      );
+
+      // Set the project data array
+      setProjectDataArray(projectData);
+    }
+
+    fetchData();
+  }, []);
+
+  const handleClick = async (projectId, voteType) => {
+
+    const disputehandlercontractabi = disputeData.abi;
+    const disputehandlercontractAddress = "0xD13B0B7490479726dE6b6A6de97633535057D98D";
+    const disputehandlercontract = new ethers.Contract(disputehandlercontractAddress, disputehandlercontractabi, signer);
+
+    try {
+      if (voteType === "positive") {
+        await disputehandlercontract.vote(true); // Assuming true represents a positive vote
+      } else {
+        await disputehandlercontract.vote(false); // Assuming false represents a negative vote
+      }
+      console.log("Vote successful");
+      // Optionally, you can update the UI or perform any other actions after voting
+    } catch (error) {
+      console.error("Error voting:", error);
+      // Handle error here
+    }
+  };
+
 
   return (
     <div className="previously-posted-container">
       <h1 className="heading">
-        DAO <span className="span-h1">Voting </span>
+        DAO <span className="span-h1">Voting</span>
       </h1>
       <div className="project-cards">
-        {previouslyPostedProjects.map((project) => (
+        {projectDataArray.map((project) => (
           <div className="prev-project-card" key={project.id}>
             <div className="h2-div">
               <h2 className="project-name">{project.name}</h2>
@@ -46,16 +101,17 @@ const Vote = () => {
               {" "}
               <span>Project Metrics:</span> {project.metrics}
             </p>
-            <p>Problem: {project.Descrepency}</p>
-            <p>Link: {project.link}</p>
+            <p>Problem: {project.problemDescription}</p>
+            <p>Link: {project.codeLink}</p>
 
             <div className="button-container">
-              <button className="negative-button">
-                Negative (In favour of Owner)
+              <button className="negative-button" onClick={() => handleClick(project.id, "negative")}>
+                Negative (In favor of Owner)
               </button>
-              <button className="positive-button">
-                Positive (In favour of Freelancer)
+              <button className="positive-button" onClick={() => handleClick(project.id, "positive")}>
+                Positive (In favor of Freelancer)
               </button>
+
             </div>
           </div>
         ))}
