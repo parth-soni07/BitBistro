@@ -11,7 +11,7 @@ body {
 .container {
   margin: 0;
   width: 100%;
-  align-items: ce;
+  align-items: center;
   padding: 20px;
 }
 
@@ -25,6 +25,7 @@ body {
   background-color: #00224D;
   color: #ACE2E1;
   padding: 20px;
+  padding-bottom: 0;
   border-radius: 50px;
   /* Make navbar pill-shaped */
   cursor: pointer;
@@ -81,23 +82,25 @@ body {
 /* Main content */
 .main-content {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
-  margin-top: 0px;
+  margin-top: 0;
+  padding-top:0;
 }
 
 .left-section,
 .right-section {
-  flex-basis: 45%;
+  flex-basis: 45%; 
   /* Adjust as needed */
 }
 
 .image-container {
-  width: 100%;
-  height: calc(100%);
+  width: 400px;
+  height:400px;
   display: flex;
   justify-content: center;
   align-items: center;
+  object-fit: fill;
 }
 
 .section-image {

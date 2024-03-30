@@ -19,7 +19,11 @@ const RecentlyPosted = () => {
 
   async function getProjects() {
     const masterAbi = masterData.abi;
-    const masterContract = new ethers.Contract(masterAddress, masterAbi, signer);
+    const masterContract = new ethers.Contract(
+      masterAddress,
+      masterAbi,
+      signer
+    );
 
     try {
       const allProjects = await masterContract.getAllProjects();
@@ -39,7 +43,11 @@ const RecentlyPosted = () => {
       console.log("Fetching data for project with ID:", projectId);
 
       try {
-        const biddingContract = new ethers.Contract(projectId, biddingData.abi, signer);
+        const biddingContract = new ethers.Contract(
+          projectId,
+          biddingData.abi,
+          signer
+        );
         const projectName = await biddingContract.projectName();
         const projectDescription = await biddingContract.projectDescription();
         const projectMetrics = await biddingContract.projectMetrics();
@@ -48,7 +56,7 @@ const RecentlyPosted = () => {
           id: projectId,
           name: projectName,
           description: projectDescription,
-          metrics: projectMetrics
+          metrics: projectMetrics,
         };
 
         projectDataArray.push(projectData);
@@ -96,13 +104,52 @@ const RecentlyPosted = () => {
       </div>
       <div className="card-container">
         {projectDataArray.slice(scrollIndex, scrollIndex + 3).map((project) => (
-          <div className="card" key={project.id}>
-            <div className="card-content">
-              <h3 className="card-title">{project.name}</h3>
-              <p className="card-description">{project.description}</p>
-              <p className="card-metrics">{project.metrics}</p>
-              <form className="recent-card-form">
-                <input type="number" placeholder="Bid Amount" />
+          <div
+            className="card"
+            key={project.id}
+            style={{
+              padding: "20px",
+              height: "350px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <div
+              className="form_Content"
+              style={{
+                height: "250px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
+              <h3 className="card-title" style={{ height: "30px" }}>
+                {project.name}
+              </h3>
+              <p className="card-description" style={{ height: "80px" }}>
+                {project.description}
+              </p>
+              <p className="card-metrics" style={{ height: "140px" }}>
+                {project.metrics}
+              </p>
+            </div>
+            <div className="form_post_bid">
+              <form
+                className="recent-card-form"
+                style={{ display: "flex", flexDirection: "column" }}
+              >
+                <input
+                  type="number"
+                  placeholder="Bid Amount eg- $100"
+                  style={{
+                    padding: "5px 5px",
+                    borderRadius: "7px",
+                    outline: "none",
+                    offset: "none",
+                    border: "1px solid",
+                  }}
+                />
                 <button className="recent-post-button" onClick={handlePostBid}>
                   Post Bid
                 </button>
