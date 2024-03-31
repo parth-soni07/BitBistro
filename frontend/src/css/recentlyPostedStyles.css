@@ -76,7 +76,6 @@
 
 .card {
     width: 350px;
-    height: 700px;
     background-color: #fff;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
@@ -157,7 +156,6 @@
     font-size: 16px;
     font-weight: bold;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    margin-top: 1rem;
 }
 
 .recent-post-button:hover {
@@ -168,5 +166,13 @@
 }
 
 .recent-card-form {
-    margin: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recent-card-form input {
+    padding: 12px;
+        border: 1px solid #ccc;
+            border-radius: 5px;
 }

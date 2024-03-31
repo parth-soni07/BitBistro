@@ -19,6 +19,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import RecentlyPosted from "./RecentlyPosted";
 import ProjectForm from "./projectForm";
 import HireForm from "./hireForm";
+import Navbar from "./Navbar";
 
 
 const Botanix = {
@@ -50,45 +51,14 @@ const HomePage = () => {
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider>
+            <Navbar />
             <Routes>
               <Route
                 exact
                 path="/"
                 element={
                   <div className="container">
-                    <nav className="navbar">
-                      <div className="navbar-left">
-                        <h1 className="logo">FreLanCircle</h1>
-                        <ul className="nav-links">
-                          <li>
-                            <Link to="/">Home</Link> {/* Path for Home page */}
-                          </li>
-                          <li>
-                            <Link to="/issues">Issues</Link>{" "}
-                            {/* Path for Issues page */}
-                          </li>
-                          <li>
-                            <Link to="/submit-work">Submit Work</Link>{" "}
-                            {/* Path for Submit Work page */}
-                          </li>
-                          <li>
-                            <Link to="/posted-projects">Posted Projects</Link>{" "}
-                            {/* Path for Submit Work page */}
-                          </li>
-                          <li>
-                            <Link to="/sign-work">Sign Work</Link>{" "}
-                            {/* Path for Submit Work page */}
-                          </li>
-                          <li>
-                            <Link to="/vote">Vote</Link>{" "}
-                            {/* Path for Submit Work page */}
-                          </li>
-                        </ul>
-                      </div>
-                      <div className="navbar-right">
-                        <ConnectButton />
-                      </div>
-                    </nav>
+                    
 
                     <div className="main-content">
                       <div className="left-section">
