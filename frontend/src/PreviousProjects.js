@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./css/previouslyPostedStyles.css";
 import biddingData from "../src/contractArtifacts/Bidding.json";
 import masterData from "../src/contractArtifacts/Master.json";
+import escrowData from "../src/contractArtifacts/Escrow.json";
 import { masterAddress } from "../src/contractArtifacts/contractAddresses.js";
 const ethers = require("ethers");
 
@@ -42,6 +43,27 @@ const PreviouslyPosted = () => {
         const projectMetrics = await biddingContract.projectMetrics();
         const isBiddingPaused = await biddingContract.biddingPaused();
         const numberOfBids = await biddingContract.getNumBidsPlaced();
+        const escrowAddress = await biddingContract.escrowAddress();
+
+        let additionalData = {};
+
+        if (escrowAddress) {
+          const escrowabi = escrowData.abi;
+          const escrowContract = new ethers.Contract(escrowAddress, escrowabi, signer);
+          const isProjectSubmitted = await escrowContract.projectSubmitted();
+
+          if (isProjectSubmitted) {
+            const codelink = await escrowContract.codeLink();
+            const assetsLink = await escrowContract.assetsLink();
+            const comments = await escrowContract.comments();
+
+            additionalData = {
+              codelink,
+              assetsLink,
+              comments
+            };
+          }
+        }
 
         const projectData = {
           id: projectId,
@@ -49,7 +71,8 @@ const PreviouslyPosted = () => {
           description: projectDescription,
           metrics: projectMetrics,
           numberOfBids: numberOfBids.toString(),
-          isBiddingPaused: isBiddingPaused
+          isBiddingPaused: isBiddingPaused,
+          ...additionalData
         };
 
         projectDataArray.push(projectData);
@@ -61,6 +84,7 @@ const PreviouslyPosted = () => {
 
     return projectDataArray;
   }
+
 
   async function toggleBiddingStatus(event, projectId) {
     event.preventDefault();
@@ -114,6 +138,14 @@ const PreviouslyPosted = () => {
 
   }
 
+  async function triggerRaiseDispute(event, projectId) { 
+    console.log("Raise Dispute");
+  }
+
+  async function ApproveProject(event, projectId) {
+    console.log("Approve Project");
+  }
+
   return (
     <div className="previously-posted-container">
       <h1 className="heading">
@@ -125,22 +157,41 @@ const PreviouslyPosted = () => {
             <div className="h2-div">
               <h2 className="project-name">{project.name}</h2>
             </div>
-            <p className="project-description">{project.description}</p>
-            <p className="project-metrics">{project.metrics}</p>
-            <p className="project-metrics">Number of Bidders: {project.numberOfBids}</p>
-            <div className="button-container">
-              <button className="archive-button" onClick={(event) => toggleBiddingStatus(event, project.id)}>
-                {project.isBiddingPaused ? "Resume" : "Pause"} Bidding
-              </button>
-              <button className="compute-bid-button" onClick={(event) => computeWinningBid(event, project.id)}>
-                Compute Winning Bid
-              </button>
-            </div>
+            {project.codelink ? ( // Check if submitted data is available
+              <>
+                <p className="project-description">Code Link: {project.codelink}</p>
+                <p className="project-description">Assets Link: {project.assetsLink}</p>
+                <p className="project-description">Comments: {project.comments}</p>
+                <div className="button-container">
+                  <button className="archive-button" onClick={(event) => triggerRaiseDispute(event, project.id)}>
+                    Raise Dispute
+                  </button>
+                  <button className="compute-bid-button" onClick={(event) => ApproveProject(event, project.id)}>
+                    Approve Submitted Project
+                  </button>
+                </div>
+              </>
+            ) : ( // Fallback to project data
+              <>
+                <p className="project-description">{project.description}</p>
+                <p className="project-metrics">{project.metrics}</p>
+                <p className="project-metrics">Number of Bidders: {project.numberOfBids}</p>
+                <div className="button-container">
+                  <button className="archive-button" onClick={(event) => toggleBiddingStatus(event, project.id)}>
+                    {project.isBiddingPaused ? "Resume" : "Pause"} Bidding
+                  </button>
+                  <button className="compute-bid-button" onClick={(event) => computeWinningBid(event, project.id)}>
+                    Compute Winning Bid
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         ))}
       </div>
     </div>
   );
+
 };
 
 export default PreviouslyPosted;

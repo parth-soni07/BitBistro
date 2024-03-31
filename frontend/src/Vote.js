@@ -3,7 +3,7 @@ import "./css/previouslyPostedStyles.css";
 import disputeData from "../src/contractArtifacts/disputeHandler.json";
 import biddingData from "../src/contractArtifacts/Bidding.json";
 import escrowData from "../src/contractArtifacts/Escrow.json";
-import { encrypt, decrypt } from "./scripts/encrypt.js";
+import masterData from "../src/contractArtifacts/Master.json";
 const ethers = require("ethers");
 
 const Vote = () => {
