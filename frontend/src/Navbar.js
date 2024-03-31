@@ -33,7 +33,7 @@ export default function Navbar(params) {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <h1 className="logo">FreLanCircle</h1>
+        <h1 className="logo">Bit Bistro</h1>
         <ul className="nav-links">
           <li>
             <Link to="/">Home</Link> {/* Path for Home page */}

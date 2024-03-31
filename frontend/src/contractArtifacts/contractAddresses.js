@@ -1,3 +1,3 @@
-export const masterAddress = "0x3a06EA42935DCC5E00237cca96619A4736909f12";
-export const tokenContractAddress = '0x060216158E267a932EF7cfCFf7c9D9aBc7Ba5b7c';
+export const masterAddress = "0xB15E8b608E273f0e4857f541f6e0f3EF2cbf5775";
+export const tokenContractAddress = '0x92976FF2623b9A848FB33440c7ee3cdE74020637';
 export const masterAccount = "0xD3C15aEa275ac6A6f1eD8681Ee002150C9DF810f";

@@ -19,7 +19,7 @@ const HireForm = () => {
             className="hire-freelancer-button"
             onClick={handleHireFreelancerClick}
           >
-            Hire Freelancer
+            Get Hired
           </button>
         </div>
       </div>
