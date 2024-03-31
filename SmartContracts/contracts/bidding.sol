@@ -45,16 +45,16 @@ contract Bidding {
         string memory _projectMetrics
     ) {
         require(
-            bytes(_projectName).length >= 5,
-            "Project name cannot be empty"
+            bytes(_projectName).length >= 4,
+            "Project name must be of length at least 4"
         );
         require(
-            bytes(_projectDescription).length >= 30,
-            "Project description cannot be empty"
+            bytes(_projectDescription).length >= 20,
+            "Project description must be of length at least 20"
         );
         require(
-            bytes(_projectMetrics).length >= 50,
-            "Project metrics cannot be empty"
+            bytes(_projectMetrics).length >= 30,
+            "Project metrics must be of length at least 30"
         );
         owner = msg.sender;
         projectName = _projectName;

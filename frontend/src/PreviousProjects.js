@@ -21,6 +21,7 @@ const PreviouslyPosted = () => {
         const allProjects = await masterContract.getProjectsByOwner(signer.getAddress());
         const projectDataArray = await getAllProjectData(allProjects, signer);
         setProjectDataArray(projectDataArray);
+        console.log("All projects by owner fetched");
       } catch (error) {
         console.log("Error fetching projects:", error);
       }
@@ -35,22 +36,25 @@ const PreviouslyPosted = () => {
     for (let index = 0; index < allProjects.length; index++) {
       const projectId = allProjects[index];
       console.log("Fetching data for project with ID:", projectId);
-
       try {
         const biddingContract = new ethers.Contract(projectId, biddingData.abi, signer);
+        console.log("Bidding contract created for project:", projectId);
         const projectName = await biddingContract.projectName();
         const projectDescription = await biddingContract.projectDescription();
         const projectMetrics = await biddingContract.projectMetrics();
         const isBiddingPaused = await biddingContract.biddingPaused();
         const numberOfBids = await biddingContract.getNumBidsPlaced();
         const escrowAddress = await biddingContract.escrowAddress();
+        console.log("escrowAddress:", escrowAddress);
+        console.log("Fetched data for project:", projectId);
 
         let additionalData = {};
 
-        if (escrowAddress) {
+        if (escrowAddress != "0x0000000000000000000000000000000000000000") {
           const escrowabi = escrowData.abi;
           const escrowContract = new ethers.Contract(escrowAddress, escrowabi, signer);
           const isProjectSubmitted = await escrowContract.projectSubmitted();
+          console.log("Is project submitted:", isProjectSubmitted);
 
           if (isProjectSubmitted) {
             const codelink = await escrowContract.codeLink();

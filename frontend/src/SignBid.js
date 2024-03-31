@@ -49,8 +49,8 @@ const SignBid = () => {
             const projectDescription = await biddingContract.projectDescription();
             const projectMetrics = await biddingContract.projectMetrics();
             const winner = await biddingContract.winner();
-            const winningBid = await biddingContract.winningBid();
-
+            const winningBid = await biddingContract.winningBid();            
+            console.log("Winning Bid:", winningBid.toString());
             const projectData = {
               id: projectId,
               name: projectName,
@@ -58,6 +58,7 @@ const SignBid = () => {
               description: projectDescription,
               metrics: projectMetrics,
               stakeAmount: winningBid,
+              winningBid: winningBid.toString(),
               role: 'Owner'
             };
             projectDataArray.push(projectData);
