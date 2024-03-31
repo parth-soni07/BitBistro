@@ -2,8 +2,10 @@ import { React, useState, useEffect } from "react";
 import "./css/signBidStyles.css";
 import biddingData from "../src/contractArtifacts/Bidding.json";
 import masterData from "../src/contractArtifacts/Master.json";
-import { masterAddress } from "../src/contractArtifacts/contractAddresses.js";
+import { masterAddress, masterAccount } from "../src/contractArtifacts/contractAddresses.js";
 import escrowData from "../src/contractArtifacts/Escrow.json";
+import tokenData from "../src/contractArtifacts/token.json";
+import { tokenContractAddress } from "./contractArtifacts/contractAddresses";
 const ethers = require("ethers");
 
 const SignBid = () => {
@@ -49,7 +51,7 @@ const SignBid = () => {
             const projectDescription = await biddingContract.projectDescription();
             const projectMetrics = await biddingContract.projectMetrics();
             const winner = await biddingContract.winner();
-            const winningBid = await biddingContract.winningBid();            
+            const winningBid = await biddingContract.winningBid();
             console.log("Winning Bid:", winningBid.toString());
             const projectData = {
               id: projectId,
@@ -93,13 +95,13 @@ const SignBid = () => {
 
   const handleSign = async (event, projectId, role) => {
     event.preventDefault();
+    const biddingContract = new ethers.Contract(projectId, biddingData.abi, signer);
+    const winner = await biddingContract.winner();
+    const winningBid = await biddingContract.winningBid();
     if (role === 'Owner') {
       const escrowAbi = escrowData.abi;
       const escrowByteCode = escrowData.bytecode;
 
-      const biddingContract = new ethers.Contract(projectId, biddingData.abi, signer);
-      const winner = await biddingContract.winner();
-      const winningBid = await biddingContract.winningBid();
 
       // Check if winningBid and winner are defined before deploying escrowContract
       if (winningBid && winner) {
@@ -111,15 +113,25 @@ const SignBid = () => {
         const biddingContract = new ethers.Contract(projectId, biddingData.abi, signer);
         await biddingContract.setEscrowAddress(escrowAddress);
         console.log("Escrow Address set in Bidding Contract");
+        const tokenAbi = tokenData.abi;
+        const tokenAddress = tokenContractAddress;
+        const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
+        const toAddress = masterAddress;
+        await tokenContract.transfer(toAddress, winningBid);
+        console.log("Signed and Staked By Owner");
       } else {
         console.error("winningBid or winner is undefined");
       }
     } else {
+      const tokenAbi = tokenData.abi;
+      const tokenAddress = tokenContractAddress;
+      const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
+      const toAddress = masterAddress;
+      const stakeAmount = (5 * parseInt(winningBid.toString())) / 100;
+      await tokenContract.transfer(toAddress, stakeAmount);
       console.log("Signed By Freelancer");
     }
   }
-
-
 
   return (
     <div className="sign-bid-container">
