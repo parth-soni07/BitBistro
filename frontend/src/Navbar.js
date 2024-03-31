@@ -56,7 +56,7 @@ export default function Navbar(params) {
           <li>
             <Link to="/vote">Vote</Link> {/* Path for Submit Work page */}
           </li>
-          <li>tokenBalance: {tokenBalance.toString()}</li>
+          <li>Balance: {tokenBalance.toString()}</li>
         </ul>
       </div>
       <div className="navbar-right">

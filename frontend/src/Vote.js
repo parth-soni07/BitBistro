@@ -19,7 +19,7 @@ const Vote = () => {
         // const masterContract = new ethers.Contract(masterData.address, masterAbi, signer);
 
         // const contractAddresses = await masterContract.getDisputeHandlers();
-        const contractAddresses = ["0x111ea7AC6cA7bA8786968c97F511548a61060aeb"];
+        const contractAddresses = ["0xD10a8A29301Fc986F0bfe21BDe4b9283b69CF3B5"];
 
         const projectData = await Promise.all(
           contractAddresses.map(async (address) => {

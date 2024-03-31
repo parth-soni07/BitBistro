@@ -79,7 +79,7 @@ const SignBid = () => {
               description: projectDescription,
               metrics: projectMetrics,
               winningBid: winningBid.toString(),
-              stakeAmount: (5 * parseInt(winningBid)) / 100,
+              stakeAmount: Math.floor(5 * (parseInt(winningBid.toString())/100)),
               role: 'Freelancer'
             };
             projectDataArray.push(projectData);
@@ -127,7 +127,7 @@ const SignBid = () => {
       const tokenAddress = tokenContractAddress;
       const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
       const toAddress = masterAddress;
-      const stakeAmount = (5 * parseInt(winningBid.toString())) / 100;
+      const stakeAmount = Math.floor(5 * (parseInt(winningBid.toString())/100));
       await tokenContract.transfer(toAddress, stakeAmount);
       console.log("Signed By Freelancer");
     }
